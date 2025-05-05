@@ -1,0 +1,12 @@
+EventID | extraParams | Comments
+1       |             | The competitor registered
+2       | startTime   | The start time was set by a draw
+3       |             | The competitor is on the start line
+4       |             | The competitor has started
+5       | firingRange | The competitor is on the firing range
+6       | target      | The target has been hit
+7       |             | The competitor left the firing range
+8       |             | The competitor entered the penalty laps
+9       |             | The competitor left the penalty laps
+10      |             | The competitor ended the main lap
+11      | comment     | The competitor can`t continue
