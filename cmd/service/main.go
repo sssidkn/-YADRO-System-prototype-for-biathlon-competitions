@@ -2,7 +2,9 @@ package main
 
 import (
 	"biathlon-competition-system/internal/config"
+	"biathlon-competition-system/internal/controller"
 	"biathlon-competition-system/internal/events"
+	"biathlon-competition-system/internal/processor"
 	"fmt"
 )
 
@@ -15,9 +17,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	competitionEvents, err := events.ParseEvents("config/events")
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(cfg, eventDefinitions, competitionEvents)
+	proc := processor.New(*cfg)
+	ctrl := controller.NewCompetitionController(
+		controller.WithProcessor(proc),
+		controller.WithEventsFile("config/events"),
+	)
+	ctrl.ProcessCompetition()
+	fmt.Println(ctrl, cfg, eventDefinitions)
 }

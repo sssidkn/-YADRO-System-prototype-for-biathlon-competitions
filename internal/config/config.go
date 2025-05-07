@@ -1,6 +1,7 @@
 package config
 
 import (
+	"biathlon-competition-system/internal/models"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -10,12 +11,12 @@ import (
 )
 
 type Config struct {
-	Laps        int    `json:"laps" validate:"required"`
-	LapLen      int    `json:"lapLen" validate:"required"`
-	PenaltyLen  int    `json:"penaltyLen" validate:"required"`
-	FiringLines int    `json:"firingLines" validate:"required"`
-	Start       string `json:"start" validate:"required"`
-	StartDelta  string `json:"startDelta" validate:"required"`
+	Laps        int               `json:"laps" validate:"required"`
+	LapLen      int               `json:"lapLen" validate:"required"`
+	PenaltyLen  int               `json:"penaltyLen" validate:"required"`
+	FiringLines int               `json:"firingLines" validate:"required"`
+	Start       models.TimeString `json:"start" validate:"required"`
+	StartDelta  string            `json:"startDelta" validate:"required,timeformat"`
 }
 
 type Option func(*Config) error
@@ -54,48 +55,6 @@ func FromFile(path string) Option {
 	}
 }
 
-func WithLaps(laps int) Option {
-	return func(c *Config) error {
-		c.Laps = laps
-		return nil
-	}
-}
-
-func WithLapLen(lapLen int) Option {
-	return func(c *Config) error {
-		c.LapLen = lapLen
-		return nil
-	}
-}
-
-func WithPenaltyLen(penaltyLen int) Option {
-	return func(c *Config) error {
-		c.PenaltyLen = penaltyLen
-		return nil
-	}
-}
-
-func WithFiringLines(firingLines int) Option {
-	return func(c *Config) error {
-		c.FiringLines = firingLines
-		return nil
-	}
-}
-
-func WithStart(start string) Option {
-	return func(c *Config) error {
-		c.Start = start
-		return nil
-	}
-}
-
-func WithStartDelta(startDelta string) Option {
-	return func(c *Config) error {
-		c.StartDelta = startDelta
-		return nil
-	}
-}
-
 func (c *Config) isValid() (bool, error) {
 	validate := validator.New()
 	err := validate.RegisterValidation("timeformat", func(fl validator.FieldLevel) bool {
@@ -107,4 +66,9 @@ func (c *Config) isValid() (bool, error) {
 	}
 	err = validate.Struct(c)
 	return err == nil, err
+}
+
+func (c *Config) GetStartDeltaDuration() time.Duration {
+	d, _ := models.ParseDuration(c.StartDelta)
+	return d
 }

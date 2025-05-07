@@ -94,7 +94,6 @@ func ParseEvents(filename string) ([]models.Event, error) {
 	return events, nil
 }
 
-// parseEventLine парсит одну строку с событием
 func parseEventLine(line string) (models.Event, error) {
 	parts := strings.Split(line, " ")
 	if len(parts) < 3 {
@@ -123,8 +122,10 @@ func parseEventLine(line string) (models.Event, error) {
 	}
 
 	return models.Event{
-		ID:          eventID,
-		ExtraParams: extraParams,
-		Competitors: []models.Competitor{{ID: uint(competitorID), StartTime: t.Format("15:04:05")}},
+		ID:         eventID,
+		ExtraParam: extraParams,
+		TimeStamp:  t,
+		Competitor: &models.Competitor{
+			ID: competitorID},
 	}, nil
 }

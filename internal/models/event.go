@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type EventDefinition struct {
 	ID          int
 	ExtraParams string
@@ -7,8 +9,15 @@ type EventDefinition struct {
 }
 
 type Event struct {
-	ID          int
-	ExtraParams string
-	Comment     string
-	Competitors []Competitor
+	ID         int
+	ExtraParam string
+	Comment    string
+	TimeStamp  time.Time
+	Competitor *Competitor
+}
+
+type EventResult struct {
+	Err           error
+	Msg           string
+	OutgoingEvent *Event
 }
